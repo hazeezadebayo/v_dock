@@ -1,4 +1,4 @@
-Generic PostgresqlDB Logging for ROS1
+Lidar based docking for ROS1 (in progress)
 ===============================
 
 This package provides ros1 services to perform basic Lidar Autodock using ICP and RANSAC. Combining the two algorithms can be beneficial. Here's how you can do it:
