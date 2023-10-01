@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <!-- Load parameters from YAML file -->
+    <rosparam file="$(find postgresqldb_log)/config/dbmngr_params.yaml" command="load"/>
+
+    <!-- Your other launch configurations -->
+    <node name="v_dock" pkg="v_dock" type="v_dock" output="screen">     
+        <!-- Pass the loaded parameters to your executable -->
+        <!-- <param name="dbname" value="$(arg dbname)" default="postgres"/>       Default value for dbname -->
+         <!-- <param name="user" value="$(arg user)" default="postgres"/>           Default value for user -->
+         <!-- <param name="pswd" value="$(arg pswd)" default="root"/>                Default value for pswd -->
+         <!-- <param name="hostaddr" value="$(arg hostaddr)" default="127.0.0.1"/>    Default value for hostaddr -->
+         <!-- <param name="port" value="$(arg port)" default="5432"/>                  Default value for port -->
+
+         <!-- <param name="task_table_name" value="$(arg task_table_name)" default="default_table_task_name"/>  -->
+         <!-- <param name="task_table_columns" value="$(arg task_table_columns)" default="[task_id, robot_id]"/>  -->
+         <!-- <param name="task_table_update" value="$(arg task_table_update)" default="{search_column: 'task_id', update_columns: 'robot_id'}"/>  -->
+
+         <!-- <param name="robot_table_name" value="$(arg robot_table_name)" default="default_table_robot_name"/>  -->
+         <!-- <param name="robot_table_columns" value="$(arg robot_table_columns)" default="[robot_id, battery_state]"/>  -->
+         <!-- <param name="robot_table_update" value="$(arg robot_table_update)" default="{search_column: 'robot_id', update_columns: 'battery_state'}"/>  -->
+    </node>
+    
+</launch>
+
+
+
