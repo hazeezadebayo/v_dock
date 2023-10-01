@@ -1,0 +1,49 @@
+Generic PostgresqlDB Logging for ROS1
+===============================
+
+This package provides ros1 services to perform basic Lidar Autodock using ICP and RANSAC. Combining the two algorithms can be beneficial. Here's how you can do it:
+-    Use RANSAC to find the initial translation and rotation of the dock relative to the robot's frame. RANSAC is suitable for this task because it's robust to outliers.
+-    Then, use ICP to fine-tune the pose (especially the orientation) of the dock. ICP is suitable for fine-grained alignment when you have a good initial estimate.
+
+
+Requirements:
+```bash
+# step 0: install ubuntu 20 and the ros noetic distro
+# $ sudo apt install -y blah blah blah
+
+```
+
+
+Services:
+```bash
+[1] /v_dock/save_dock - "/v_dock/save_dock".
+[2] /v_dock/dock_service - "/v_dock/dock_service".
+[3] /v_dock/undock_service - "/v_dock/undock_service".
+```
+
+Publishers:
+```bash
+[1] /cmd_vel
+[2] /v_dock/dock_notification
+```
+
+SUbscribers:
+```bash
+[1] /odom
+[2] /scan
+```
+
+Usage:
+Terminal 1:
+```bash
+$ cd $package_ws/src
+$ git clone <this package url>
+$ cd ..
+$ catkin_make # catkin_make --only-pkg-with-deps postgresqldb_log
+$ source devel/setup.bash
+$ roslaunch v_dock v_dock.launch
+```
+
+
+
+
