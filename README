@@ -39,7 +39,7 @@ Terminal 1:
 $ cd $package_ws/src
 $ git clone <this package url>
 $ cd ..
-$ catkin_make # catkin_make --only-pkg-with-deps postgresqldb_log
+$ catkin_make 
 $ source devel/setup.bash
 $ roslaunch v_dock v_dock.launch
 ```
