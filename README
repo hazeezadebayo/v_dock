@@ -27,7 +27,7 @@ Publishers:
 [2] /v_dock/dock_notification
 ```
 
-SUbscribers:
+Subscribers:
 ```bash
 [1] /odom
 [2] /scan
