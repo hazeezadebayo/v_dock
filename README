@@ -19,7 +19,7 @@ Services:
 [1] /v_dock/save_dock - "/v_dock/save_dock".
 [2] /v_dock/dock_service - "/v_dock/dock_service".
 [3] /v_dock/undock_service - "/v_dock/undock_service".
-[]4 /v_dock/dock_notification - "returns: done, reverse in-progress, forward in-progress, stopping, breakdown/fault etc.".
+[]4 /v_dock/dock_notification - "returns: done, in-progress, stopping, breakdown/fault etc.".
 ```
 
 Publishers:
