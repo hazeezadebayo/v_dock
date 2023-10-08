@@ -16,10 +16,10 @@ Requirements:
 
 Services:
 ```bash
-[1] /v_dock/save_dock - "/v_dock/save_dock".
-[2] /v_dock/dock_service - "/v_dock/dock_service".
-[3] /v_dock/undock_service - "/v_dock/undock_service".
-[4] /v_dock/dock_notification - "returns: done, in-progress, stopping, breakdown/fault etc.".
+[1] /v_dock/save - "/v_dock/save".
+[2] /v_dock/dock - "/v_dock/dock".
+[3] /v_dock/undock - "/v_dock/undock".
+[4] /v_dock/notification - "returns: done, in-progress, stopping, breakdown/fault etc.".
 ```
 
 Publishers:
