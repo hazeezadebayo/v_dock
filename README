@@ -2,8 +2,8 @@ Lidar based docking for ROS1 (in progress)
 ===============================
 
 This package provides ros1 services to perform basic Lidar Autodock using ICP and RANSAC. Combining the two algorithms can be beneficial. Here's how:
--    Use RANSAC to find the initial translation and rotation of the dock relative to the robot's frame. RANSAC is suitable for this task because it's robust to outliers.
--    Then, use ICP to fine-tune the pose (especially the orientation) of the dock. ICP is suitable for fine-grained alignment when you have a good initial estimate.
+-    RANSAC is used to find the initial translation and rotation of the dock relative to the robot's frame. RANSAC is suitable for this task because it's robust to outliers.
+-    Then, ICP is used to fine-tune the pose (especially the orientation) of the dock. ICP is suitable for fine-grained alignment when you have a good initial estimate.
 
 
 Requirements:
