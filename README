@@ -19,7 +19,7 @@ Services:
 [1] /v_dock/save - "/v_dock/save".
 [2] /v_dock/dock - "/v_dock/dock".
 [3] /v_dock/undock - "/v_dock/undock".
-[4] /v_dock/status - "returns: done, in-progress, stopping, breakdown/fault etc.".
+[4] /v_dock/status - "returns: online, in-progress, stopping, done, breakdown/fault".
 ```
 
 Publishers:
