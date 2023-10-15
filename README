@@ -1,0 +1,68 @@
+Lidar based docking for ROS1 (in progress)
+===============================
+
+This package provides ros1 services to perform basic Lidar Autodock using ICP and RANSAC. Combining the two algorithms can be beneficial. Here's how:
+
+-    RANSAC is used to find the initial translation and rotation of the dock relative to the robot's frame. RANSAC is suitable for this task because it's robust to outliers.
+-    Then, ICP is used to fine-tune the pose orientation of the dock action. ICP is suitable for fine-grained alignment when you have a good initial estimate.
+
+The distance between dock and base_link is used to determine if the robot has reached the dock. Furthermore, This package requires a V-shaped landmark with the following dimensions:
+
+    - The two lines that make up the V should be between 40 - 30cm of length each.
+    - A visible gap from the lidar should be maintained between the two lines, ideally 4cm.
+    - The angle encompassed between the V shape should ideally be between 95mm long at a 155 degree.
+
+
+Requirements:
+```bash
+# step 0: install ubuntu 20 and the ros noetic distro
+# $ sudo apt install -y blah blah blah
+# 
+```
+
+
+The services hosted by this node are listed below with their respective calls. pretty self explanatory. The 'save' service creates a 'v_dock.yaml' file in the '/config' folder with information of the dock station and a target scan for the ICP. Futhermore, the 'dock' service calls the move base to get the robot to a pre-dock position hence this package would require the movebase stack to be set-up on your robot. Finally, the 'status' service at any time returns the dock status of the robot with values like; fault, completed, online, -ing...
+
+Services:
+```bash
+[1] /v_dock/save - 'rosservice call /v_dock/save "data: true"'.
+[2] /v_dock/dock - 'rosservice call /v_dock/dock "data: true"'.
+[3] /v_dock/undock - 'rosservice call /v_dock/undock "data: true"'.
+[4] /v_dock/status - 'rosservice call /v_dock/status "data: true"'.
+```
+
+
+Publishers:
+```bash
+[1] /cmd_vel
+```
+
+
+Subscribers:
+```bash
+[1] /odom
+[2] /scan
+```
+
+
+Usage:
+- Firstly, run movebase on your robot. move the robot about 1 metre in front of the dock. anything between 0.85m - 1.15m should do fine.
+- Call 'save' service.
+- Drive the robot to any random position
+- Call 'dock' service etc.
+
+Terminal 1:
+```bash
+$ cd $package_ws/src
+$ git clone <this package url>
+$ cd ..
+$ catkin_make 
+$ source devel/setup.bash
+$ roslaunch v_dock v_dock.launch 
+# python3 src/v_dock/scripts/v_dock_node.py 
+```
+
+
+
+
+
