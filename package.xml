@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>v_dock</name>
+  <version>0.0.2</version>
+  <description>The v_dock package</description>
+
+  <author email="hazeezadebayo@gmail.com">Azeez Adebayo</author>
+  <maintainer email="hazeezadebayo@gmail.com">Azeez Adebayo</maintainer>
+  <license>GPLv2</license>
+  <url type="website">https://www.linkedin.com/in/hazeezadebayo/</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>actionlib</depend>
+  <depend>actionlib_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>tf2</depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>roslib</build_depend>
+  <build_depend>rosgraph</build_depend>
+  <build_depend>rostopic</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_srvs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>move_base_msgs</build_depend>
+
+  <!-- 
+    <build_depend>libssl-dev</build_depend>
+    <build_depend>postgresql</build_depend>
+    <exec_depend>postgresql</exec_depend> 
+  -->
+
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>roslib</exec_depend>
+  <exec_depend>rosgraph</exec_depend>
+  <exec_depend>rostopic</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>move_base_msgs</exec_depend>
+
+  <export>
+  </export>
+</package>
