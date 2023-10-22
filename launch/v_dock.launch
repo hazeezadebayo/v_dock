@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <arg name="odom_topic" default="/odom"/>  <!--  /diffamr_diff_drive_controller/odom -->
+    <arg name="scan_topic" default="/scan"/>  <!--   /sick_safetyscanners_front/scan  -->
+    <arg name="cmd_vel_topic" default="/cmd_vel"/> <!--   /diffamr_diff_drive_controller/cmd_vel  -->
+    <arg name="scan_frame" default="two_d_lidar"/>  <!-- front_sicknanoscan: lidar frame wherein scan msg comes from -->
+    <arg name="odom_frame" default="odom"/>  <!--     -->
+    <arg name="detection_frame" default="detection"/>  <!-- desired name for the detection frame, or v_dock detection frame -->
+    <arg name="tar_sector_boundary" default="10"/>  <!-- 'must be >= 10 and <=35': degrees to the left and right from the v_dock mid-point to make up consideration sector -->
+    <arg name="target_length" default="0.55"/>  <!-- \v/ shape : length of each line (55cm) -->
+    <arg name="max_gap_threshold" default="0.3"/>  <!-- \ gap / : Define a threshold for the maximum allowed distance between the two lines that make up V -->
+    <arg name="linear_velocity" default="0.05"/>  <!-- 0.1: dock speed linear -->
+    <arg name="angular_velocity" default="0.1"/>  <!-- 0.1: dock speed angular -->
+    <arg name="dock_distance_tolerance" default="0.75"/>  <!-- distance in meters rep tolerance for which robot should stop and goal is accepted as success  -->
+    <!-- optional: format -:> ['x', 'y', 'z', 'w']  -->
+    <arg name="move_base_goal" default="['x', 'y', 'z', 'w']" />  <!--format: ['0.0', '0.0', '0.0', '1.0'] if a number replaces this defaule values, it implied a move base pre-pre-dock pose -->
+
+    <node name="v_dock_node" pkg="v_dock" type="v_dock_node.py" output="screen">
+        <param name="odom_topic" value="$(arg odom_topic)"/>
+        <param name="scan_topic" value="$(arg scan_topic)"/>
+        <param name="cmd_vel_topic" value="$(arg cmd_vel_topic)"/>
+        <param name="scan_frame" value="$(arg scan_frame)"/>
+        <param name="odom_frame" value="$(arg odom_frame)"/>
+        <param name="detection_frame" value="$(arg detection_frame)"/>
+        <param name="tar_sector_boundary" value="$(arg tar_sector_boundary)"/>
+        <param name="target_length" value="$(arg target_length)"/>
+        <param name="max_gap_threshold" value="$(arg max_gap_threshold)"/>
+        <param name="linear_velocity" value="$(arg linear_velocity)"/>
+        <param name="angular_velocity" value="$(arg angular_velocity)"/>
+        <param name="dock_distance_tolerance" value="$(arg dock_distance_tolerance)"/>
+        <param name="move_base_goal" value="$(arg move_base_goal)" />
+    </node>
+
+
+	<node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen">
+	    <!-- <remap from="cmd_vel" to="/twist" /> -->
+
+        <!-- Load common configuration files -->
+        <rosparam file="$(find v_dock)/config/movebase/move_base_params.yaml" command="load" />
+        <rosparam file="$(find v_dock)/config/movebase/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find v_dock)/config/movebase/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find v_dock)/config/movebase/base_local_planner_params.yaml" command="load" />
+
+        <!-- Load global navigation specific parameters -->
+        <rosparam file="$(find v_dock)/config/movebase/local_costmap.local" command="load" />
+        <rosparam file="$(find v_dock)/config/movebase/global_costmap.local" command="load" />
+    </node>
+
+
+</launch>
+
+
+
+
