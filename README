@@ -20,6 +20,21 @@ Requirements:
 ```
 
 
+Folder structure:
+```bash
+v_dock/
+├── CMakeLists.txt
+├── package.xml
+├── setup.py
+└── scripts/
+    ├── v_dock_node.py 
+    ├── v_dock_test.py 
+    └── v_dock/
+        └── v_dock_icp.py
+└── srv/
+    └── Vdock.srv
+```
+
 The services hosted by this node are listed below with their respective calls. pretty self explanatory. The `save` service creates a `v_dock.yaml` file in the `/config` folder with information of the dock station or appends to the .yaml file by the the `dock_id` if it already exist. A target scan for the ICP is also saved. Futhermore, the `dock` service calls the move base to get the robot to a pre-pre-dock position. Hence this package would require the movebase stack to be set-up on your robot. That is, if a move_base_goal is specified in the launch file. However, if not specified, the dock controller gets the robot to a pre-dock pose. Finally, the `status` service at any time returns the dock status of the robot with values like; fault, completed, online, dock, undock, pre-dock etc. The status service does not require the integer id of the dock to function.
 
 
@@ -62,4 +77,5 @@ $ source devel/setup.bash
 $ roslaunch v_dock v_dock.launch 
 # python3 src/v_dock/scripts/v_dock_node.py 
 ```
+
 
