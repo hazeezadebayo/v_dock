@@ -618,7 +618,7 @@ class vDockNode:
                 else:
                     self.cmd_vel_msg.linear.x  = -0.01 
                     self.cmd_vel_msg.angular.z = -1 * self.angular_velocity # -0.02 
-                    print("::backward_left")         
+                    # print("::backward_left")         
             # -------------------------------------
             # Goal achieved, go to the next goal  
             else:
