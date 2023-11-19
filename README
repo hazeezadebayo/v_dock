@@ -1,4 +1,4 @@
-Lidar based docking for ROS1 (in progress)
+Lidar based docking for ROS1 (still maintained)
 ===============================
 
 This package provides ros1 services to perform basic Lidar Autodock using ICP and RANSAC. Combining the two algorithms can be beneficial. Here's how:
@@ -6,12 +6,21 @@ This package provides ros1 services to perform basic Lidar Autodock using ICP an
 -    RANSAC is used to find the initial translation and rotation of the dock relative to the robot's frame. RANSAC is suitable for this task because it's robust to outliers.
 -    Then, ICP is used to fine-tune the pose orientation of the dock action. ICP is suitable for fine-grained alignment when you have a good initial estimate.
 
-The distance between dock and base_link is used to determine if the robot has reached the dock. Furthermore, This package requires a V-shaped landmark with the following dimensions:
+The distance between dock and base_link is used to determine if the robot has reached the dock. 
 
-    - The two lines that make up the V should be between 40 - 30cm of length each.
+Furthermore, This package allows for two v dock shape cases:
+
+case a: requires a `v` shaped landmark with the following dimensions:
+    - The two lines of same approximate length that make up the V should be between 50 - 30cm of length each.
     - A visible gap from the lidar should be maintained between the two lines, ideally 4cm.
-    - The angle encompassed between the V shape should ideally be between 95mm long at a 155 degree. These values are however adjustable in the launch arguments.
+    - The angle encompassed between the V shape should ideally be between 99 to 155 degrees. These values are however adjustable in the launch arguments.
 
+
+case b: or a `-v-` shaped landmark with the following dimensions:
+    - case b is the default case.
+    - The four lines of equal length that make up the -v- should be typically be between 50 - 30cm for each length.
+    - No gap should be maintained between the all four lines.
+    - The three angle encompassed between the -v- shape should ideally be between 99 to 155 degrees i.e. angle1 -\, angle2 \/, and angle3 /- . These values are however adjustable in the launch arguments using `required_angles` default at ['150','100','150']. values should be changed to ['x','y','z'] if case a is desired.
 
 Requirements:
 ```bash
@@ -35,7 +44,9 @@ v_dock/
     └── Vdock.srv
 ```
 
+
 The services hosted by this node are listed below with their respective calls. pretty self explanatory. The `save` service creates a `v_dock.yaml` file in the `/config` folder with information of the dock station or appends to the .yaml file by the the `dock_id` if it already exist. A target scan for the ICP is also saved. Futhermore, the `dock` service calls the move base to get the robot to a pre-pre-dock position. Hence this package would require the movebase stack to be set-up on your robot. That is, if a move_base_goal is specified in the launch file. However, if not specified, the dock controller gets the robot to a pre-dock pose. Finally, the `status` service at any time returns the dock status of the robot with values like; fault, completed, online, dock, undock, pre-dock etc. The status service does not require the integer id of the dock to function.
+
 
 
 Services:
