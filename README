@@ -8,7 +8,7 @@ This package provides ros1 services to perform basic Lidar Autodock using ICP an
 
 The distance between dock and base_link is used to determine if the robot has reached the dock. 
 
-Furthermore, This package allows for two v-dock shape cases:
+Furthermore, This package allows for two v dock shape cases:
 
 case 1: requires a `v` shaped landmark with the following dimensions:
     - The two lines of same approximate length that make up the V should be between 50 - 30cm of length each.
@@ -17,10 +17,10 @@ case 1: requires a `v` shaped landmark with the following dimensions:
 
 
 case 2: or a `-v-` shaped landmark with the following dimensions:
-    - case 1 is the default case.
+    - case 2 is the default case.
     - The four lines of equal length that make up the -v- should be typically be between 50 - 30cm for each length.
     - No gap should be maintained between the all four lines.
-    - The three angle encompassed between the -v- shape should ideally be between 99 to 155 degrees i.e. angle1 -\, angle2 \/, and angle3 /- . These values are however adjustable in the launch arguments using `required_angles` default at ['150','100','150']. values should be changed to ['x','y','z'] if case a is desired.
+    - The three angle encompassed between the -v- shape should ideally be between 99 to 155 degrees i.e. angle1 -\, angle2 \/, and angle3 /- . These values are however adjustable in the launch arguments using `required_angles` default at ['150','100','150']. values should be changed to ['x','y','z'], if case 1 is desired.
 
 Requirements:
 ```bash
