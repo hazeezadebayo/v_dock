@@ -21,7 +21,7 @@
     <arg name="trust_val" default="0.9"/>  <!-- max=1,min=0: how much of the new information about the estimated dock pose should i trust against the one i saved with the save service.-->
     <!-- optional: list format -:> ['x', 'y', 'z', 'w']  -->
     <arg name="move_base_goal" default="['x', 'y', 'z', 'w']" />  <!--format: ['0.0', '0.0', '0.0', '1.0'] if a number replaces this defaule values, it implied a move base pre-pre-dock pose -->
-    <arg name="required_angles" default="['150', '110', '150']" />  <!-- __/\__ ==> __ang1 / ang2 \ ang3__ ==> ['x', 'y', 'z'] ==> ['150', '110', '150'] -->
+    <arg name="required_angles" default="['136', '136', '136']" />  <!-- __/\__ ==> __ang1 / ang2 \ ang3__ ==> ['x', 'y', 'z'] ==> ['150', '110', '150'] -->
 
     <node name="v_dock_node" pkg="v_dock" type="v_dock_node.py" output="screen">
         <param name="odom_topic" value="$(arg odom_topic)"/>
