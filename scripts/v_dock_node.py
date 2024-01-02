@@ -804,14 +804,14 @@ class vDockNode:
 
     def estimate_dock_pose(self, v_midpoint_x, v_midpoint_y, quat, laser_data):
             # Publish transformation
-            # broadcaster = tf.TransformBroadcaster()
-            # broadcaster.sendTransform(
-            #     (v_midpoint_x, v_midpoint_y, 0.0),  # Translation (x, y, z)
-            #     (quat[0], quat[1], quat[2], quat[3]),  # Rotation (quaternion)
-            #     rospy.Time.now(),
-            #     self.detection_frame,
-            #     self.scan_frame 
-            # )
+            broadcaster = tf.TransformBroadcaster()
+            broadcaster.sendTransform(
+                 (v_midpoint_x, v_midpoint_y, 0.0),  # Translation (x, y, z)
+                 (quat[0], quat[1], quat[2], quat[3]),  # Rotation (quaternion)
+                 rospy.Time.now(),
+                 self.detection_frame,
+                 self.scan_frame 
+            )
 
             # continuation...  
             pose_in_detection = PoseStamped()
@@ -972,14 +972,14 @@ class vDockNode:
                     v_midpoint_y =(lines[i][3]+lines[i][5])/2
 
                     # Publish transformation
-                    broadcaster = tf.TransformBroadcaster()
-                    broadcaster.sendTransform(
-                        (v_midpoint_x, v_midpoint_y, 0.0),  # Translation (x, y, z)
-                        (0.0, 0.0, 0.0, 1.0),  # Rotation (quaternion)
-                        rospy.Time.now(),
-                        self.detection_frame,
-                        self.scan_frame 
-                    )
+                    # broadcaster = tf.TransformBroadcaster()
+                    # broadcaster.sendTransform(
+                    #    (v_midpoint_x, v_midpoint_y, 0.0),  # Translation (x, y, z)
+                    #    (0.0, 0.0, 0.0, 1.0),  # Rotation (quaternion)
+                    #    rospy.Time.now(),
+                    #    self.detection_frame,
+                    #    self.scan_frame 
+                    # )
 
                     distance_to_detection = self.calculate_distance([self.pose_x, self.pose_y], [v_midpoint_x, v_midpoint_y])
                     # However, if we have a map, then lets use robot's AMCL pose as it is more accurate.
