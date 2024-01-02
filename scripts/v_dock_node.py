@@ -40,11 +40,11 @@ from v_dock.v_dock_icp import IterativeClosestPoint
 # ---------------------------------------------------
 
 # v_dock: 
-# line AB + gap + line CD       |    line AB = BC = CD = DE and B, C, and D are angles   
-#      A-gap-C                                    C
-#       /   \                                     /\
-#      /     \                 or                /  \
-#   B /       \ D                        A ____B/    \D____ E
+# line AB + gap + line CD   |   line AB = BC = CD = DE and B, C, and D are angles   
+#      A-gap-C              |                 C
+#       /   \               |                 /\
+#      /     \             or                /  \
+#   B /       \ D           |        A ____B/    \D____ E
 
 # ---------------------------------------------------
 
@@ -84,7 +84,7 @@ from v_dock.v_dock_icp import IterativeClosestPoint
 # CONSTANTS
 SPLIT_MERGE_TRESHOLD = 0.01 # 0.025
 DOCK_ANGLE_TRESHOLD = 50 # 20
-DOCK_LENGTH_TRESHOLD = 0.2 # 0.5
+DOCK_LENGTH_TRESHOLD = 0.1 #0.2 # 0.5
 
 
 
@@ -772,6 +772,7 @@ class vDockNode:
         print("score: ", score_ang, score_len)
         print("lengths", lengths)
         print("angles", angles)
+        time.sleep(5.0)
         if ((score_ang >= 3) and (score_len >= 0)) or ((score_ang >= 1) and (score_len >= 4)): # yay we found the dock now we do the dockerinos
             return True
         return False
@@ -803,14 +804,14 @@ class vDockNode:
 
     def estimate_dock_pose(self, v_midpoint_x, v_midpoint_y, quat, laser_data):
             # Publish transformation
-            broadcaster = tf.TransformBroadcaster()
-            broadcaster.sendTransform(
-                (v_midpoint_x, v_midpoint_y, 0.0),  # Translation (x, y, z)
-                (quat[0], quat[1], quat[2], quat[3]),  # Rotation (quaternion)
-                rospy.Time.now(),
-                self.detection_frame,
-                self.scan_frame 
-            )
+            # broadcaster = tf.TransformBroadcaster()
+            # broadcaster.sendTransform(
+            #     (v_midpoint_x, v_midpoint_y, 0.0),  # Translation (x, y, z)
+            #     (quat[0], quat[1], quat[2], quat[3]),  # Rotation (quaternion)
+            #     rospy.Time.now(),
+            #     self.detection_frame,
+            #     self.scan_frame 
+            # )
 
             # continuation...  
             pose_in_detection = PoseStamped()
@@ -906,7 +907,7 @@ class vDockNode:
 
     def laser_callback(self, scan):
         # Check if at least 3.5 seconds have passed since the last call
-        if (time.time() - self.time_prev_call) >= 1.2:
+        if (time.time() - self.time_prev_call) >= 4.0:
             # Update the time of the previous call to the current time
             self.time_prev_call = time.time()
 
@@ -960,6 +961,7 @@ class vDockNode:
             # Only check for U-shaped lines if there are at least two lines detected
             if len(lines) >= 1 and self.closed_v_with_sidelines == True:
                 # Check if two consecutive lines form a 'V'
+                
                 for i in range(len(lines) ):
                     print(" \n                      index ", i , " : ")
         
@@ -969,16 +971,28 @@ class vDockNode:
                     v_midpoint_x =(lines[i][2]+lines[i][4])/2
                     v_midpoint_y =(lines[i][3]+lines[i][5])/2
 
+                    # Publish transformation
+                    broadcaster = tf.TransformBroadcaster()
+                    broadcaster.sendTransform(
+                        (v_midpoint_x, v_midpoint_y, 0.0),  # Translation (x, y, z)
+                        (0.0, 0.0, 0.0, 1.0),  # Rotation (quaternion)
+                        rospy.Time.now(),
+                        self.detection_frame,
+                        self.scan_frame 
+                    )
+
                     distance_to_detection = self.calculate_distance([self.pose_x, self.pose_y], [v_midpoint_x, v_midpoint_y])
                     # However, if we have a map, then lets use robot's AMCL pose as it is more accurate.
+                    #time.sleep(5.0)
                     if self.map_frame != None:
                         if self.noamclposebefore == True:
                             distance_to_detection = self.calculate_distance([self.Amcl_x, self.Amcl_y], [v_midpoint_x, v_midpoint_y])
                     print("calculated distance_to_detection: ", distance_to_detection, " ",float(self.min_acceptable_detection_dist))
-    
+                    #print("required_length*2: ", (self.required_length*2), " v_end_point_dist: ",float(v_end_point_dist), "required_length*4: ",(self.required_length*4) )
+                   # time.sleep(5.0)
                     if distance_to_detection <= float(self.min_acceptable_detection_dist) \
-                        and ((self.required_length*2) < v_end_point_dist <= (self.required_length*4)): 
-                    
+                        and ((self.required_length*2) < v_end_point_dist <= (self.required_length*6)): 
+                       # print("I AM HERE")
                         # Calculate start and end angles
                         start_angle = np.arctan2(lines[i][3] - self.pose_y, lines[i][2] - self.pose_x)
                         end_angle = np.arctan2(lines[i][5] - self.pose_y, lines[i][4] - self.pose_x)
@@ -1237,6 +1251,7 @@ if __name__ == '__main__':
 
 
 # publish_transform(midpoint_x, midpoint_y)
+
 
 
 
