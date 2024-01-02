@@ -1024,7 +1024,7 @@ class vDockNode:
             elif len(lines) >= 2 and self.closed_v_with_sidelines == False:
                 
                 v_lines = []
-                for i in range(len(lines) - 2):
+                for i in range(len(lines)):
                     length = self.calculate_distance([lines[i][2], lines[i][3]], [lines[i][4], lines[i][5]])
                     if (self.required_length/2) <= length <= (self.required_length+DOCK_LENGTH_TRESHOLD): # self.target_length:
                         v_lines.append(lines[i])
