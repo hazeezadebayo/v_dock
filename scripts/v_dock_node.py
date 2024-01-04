@@ -126,6 +126,8 @@ class vDockNode:
         self.xdiff, self.ydiff, self.thdiff = 0.0, 0.0, 0.0
         self.noamclposebefore = True
         self.closed_v_with_sidelines = False
+        self.lidar_front_start = np.radians(45)
+        self.lidar_front_end = np.radians(135)
 
         # rospy.loginfo("Received move_base_goal list parameter: " + str(self.mbg))
         # rospy.loginfo("----:>  {}".format(self.V_shape_angle[0]))
@@ -772,12 +774,13 @@ class vDockNode:
         print("score: ", score_ang, score_len)
         print("lengths", lengths)
         print("angles", angles)
-        time.sleep(5.0)
+        # time.sleep(5.0)
         if ((score_ang >= 3) and (score_len >= 0)) or ((score_ang >= 1) and (score_len >= 4)): # yay we found the dock now we do the dockerinos
             return True
         return False
 
 
+ 
     def analyzeGroup(self, points):
         lines = []
         farthestTwoPoints = self.findFarthestTwoPoints(points)
@@ -859,6 +862,9 @@ class vDockNode:
                 self.est_dock_y = transformed_pose_y 
                 self.est_dock_z = transformed_quat.z # quat[2] 
                 self.est_dock_w = transformed_quat.w # quat[3] 
+                # we just detected a potential dock. we need to give user some time to save. 
+                # we need to preserve the current values too as thats whats supposed to be saved.
+                self.detection_time = time.time() # re-start the timer
                 # beyond this point I assume dock service has been called and i have a dock pose associated with the id the service was called with
                 if self.initialize_dock: # say id = 3
                     # what if there are two dock stations beside each other, how do i tell that id=3 is what i am detecting precisely 
@@ -904,7 +910,7 @@ class vDockNode:
                 rospy.logwarn("Transform lookup failed. Cannot transform the pose.")
 
 
-
+ 
     def laser_callback(self, scan):
         # Check if at least 3.5 seconds have passed since the last call
         if (time.time() - self.time_prev_call) >= 4.0:
@@ -916,7 +922,8 @@ class vDockNode:
 
             # Filter out invalid or outlier range measurements
             ranges = np.array(scan.ranges)
-            valid_indices = np.where((ranges > scan.range_min) & (ranges < scan.range_max))[0]
+            valid_indices = np.where((ranges > scan.range_min) & (ranges < scan.range_max) & (angles >= self.lidar_front_start) & (angles <= self.lidar_front_end))[0]
+            # valid_indices = np.where((ranges > scan.range_min) & (ranges < scan.range_max))[0]
             valid_ranges = np.take(ranges, valid_indices)
             valid_angles = np.take(angles, valid_indices)
             
@@ -1025,6 +1032,16 @@ class vDockNode:
                             # analyze subset for line
                             found = self.analyzeGroup(mini_scan)
                             if found == True:
+                                # before we over-write the previously collected dock parameters
+                                # as we have quite recently found a new one. how about if we wait some duration 
+                                # for the user to still decide if he wants to save the dock or not
+                                # Naturally, this duration shouldnt be long because in the normal go-to-dock mode, 
+                                # this function is still required.
+                                # If a potential dock has been detected, check if the delay has passed
+                                # if time.time() - self.detection_time < self.detection_delay:
+                                    # If the delay has not passed, return early
+                                    # return False
+         
                                 print("found a { -v- } shaped line candidate.")
                                 print("---------------------------")
                                 print("\n")
