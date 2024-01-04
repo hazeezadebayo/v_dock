@@ -126,8 +126,12 @@ class vDockNode:
         self.xdiff, self.ydiff, self.thdiff = 0.0, 0.0, 0.0
         self.noamclposebefore = True
         self.closed_v_with_sidelines = False
+        
         self.lidar_front_start = np.radians(45)
         self.lidar_front_end = np.radians(135)
+        self.time_waste_mag = 6
+        self.detection_time = time.time()
+        self.detection_delay = 60
 
         # rospy.loginfo("Received move_base_goal list parameter: " + str(self.mbg))
         # rospy.loginfo("----:>  {}".format(self.V_shape_angle[0]))
@@ -780,6 +784,15 @@ class vDockNode:
         return False
 
 
+    def time_waster(self):
+        start_time = time.time()
+        # Perform some non-trivial computations
+        for _ in range(10**int(self.time_waste_mag)):
+            _ = 2 * 2  # This operation doesn't contribute much
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print(f"Function took {elapsed_time:.6f} seconds.")
+        
  
     def analyzeGroup(self, points):
         lines = []
@@ -1032,16 +1045,12 @@ class vDockNode:
                             # analyze subset for line
                             found = self.analyzeGroup(mini_scan)
                             if found == True:
-                                # before we over-write the previously collected dock parameters
-                                # as we have quite recently found a new one. how about if we wait some duration 
-                                # for the user to still decide if he wants to save the dock or not
-                                # Naturally, this duration shouldnt be long because in the normal go-to-dock mode, 
-                                # this function is still required.
-                                # If a potential dock has been detected, check if the delay has passed
-                                # if time.time() - self.detection_time < self.detection_delay:
-                                    # If the delay has not passed, return early
-                                    # return False
-         
+                                # before we over-write the previously collected dock parameters as we have quite recently 
+                                # found a new one, potential dock. how about if we wait some duration for the user to still 
+                                # decide if he wants to save the dock or not. Naturally, this duration shouldnt be long because 
+                                # in the normal go-to-dock mode, this function is still required.
+                                if time.time() - self.detection_time < self.detection_delay:
+                                    self.time_waster() # If the delay has not passed, waste some time.
                                 print("found a { -v- } shaped line candidate.")
                                 print("---------------------------")
                                 print("\n")
@@ -1115,6 +1124,8 @@ class vDockNode:
                             print("calculated distance_to_detection: ", distance_to_detection, " ",float(self.min_acceptable_detection_dist))
                
                             if distance_to_detection <= float(self.min_acceptable_detection_dist): 
+                                if time.time() - self.detection_time < self.detection_delay:
+                                    self.time_waster() # If the delay has not passed, waste some time.
                                 print("found a { v } shaped line candidate.")
                                 print("---------------------------")
                                 print("\n")
